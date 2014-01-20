@@ -4,7 +4,17 @@ window.Wine = Backbone.Collection.extend();
 
 window.WineCollection = Backbone.Collection.extend({
 	model: Wine,   //specifies the collection
-	url:"../api/wines"    // API endpoint
+	url:"../api/wines",   // API endpoint
+	defaults: {
+        "id":null,
+        "name":"",
+        "grapes":"",
+        "country":"USA",
+        "region":"California",
+        "year":"",
+        "description":"",
+        "picture":""
+    }
 });
 
 //Views
@@ -41,7 +51,7 @@ window.WineListItemView = Backbone.View.extend ({
 
 window.WineView = Backbone.View.extend ({
 
-	template:_.template($('#tpl-wine-details').html()),
+	template:_.template($('#tpl-wine-details').html()),  //creates html element
 	
 	render: function (eventName) {
 		$(this.el).html(this.template(this.model.toJSON()));
@@ -49,3 +59,27 @@ window.WineView = Backbone.View.extend ({
 	}
 
 });
+
+
+//Router
+
+//Provides the entry points for the application through a set of (deep-linkable) URLs.Default route (“”) displays the list of wine. The “wines/:id” route displays the details of a specific wine in the wine form. 
+
+var AppRouter = Backbone.Router.extend ({
+	routes: {
+		"": "list",
+		"wines/:id": "windDetails"
+	},
+
+	list: function() {
+		this.WineList = new WineCollection();
+		this.WineListView = new WineListView({model:this.wine});
+		$('#content').html(this.wineView.render().el);
+
+
+	}
+});
+
+var app = new AppRouter();
+Backbone.history.start();
+
