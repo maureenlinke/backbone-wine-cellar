@@ -153,23 +153,20 @@ window.HeaderView = Backbone.View.extend({
 //Provides the entry points for the application through a set of (deep-linkable) URLs.Default route (“”) displays the list of wine. The “wines/:id” route displays the details of a specific wine in the wine form. 
 
 var AppRouter = Backbone.Router.extend({
-	routes: {
-		"": "list",
-		"wines/:id": "windDetails"
-	},
+    routes:{
+        "":"list",
+        "wines/:id":"wineDetails"
+    },
 
-	initialize: function (){
-		$('#header').html(new HeaderView().render().el);
-
-	},
-
-	list: function() {
-		this.WineList = new WineCollection();
-		this.WineListView = new WineListView({model:this.wineList});
-		this.WineList.fetch();
-		$('#sidebar').html(this.wineView.render().el);
-	},
-
+    initialize:function () {
+        $('#header').html(new HeaderView().render().el);
+    },
+    list:function () {
+        this.wineList = new WineCollection();
+        this.wineListView = new WineListView({model:this.wineList});
+        this.wineList.fetch();
+        $('#sidebar').html(this.wineListView.render().el);
+    },
 	wineDetails:function (id) {
         this.wine = this.wineList.get(id);
         if (app.wineView) app.wineView.close();
